@@ -1,30 +1,81 @@
+// get value function
+function getInputValueById(id) {
+  return parseFloat(document.getElementById(id).value);
+}
+
+function showError(id) {
+  return document.getElementById(id).classList.remove("hidden");
+}
+
+function formateCurrency(amount) {
+  return `${amount.toFixed(2)}`;
+}
+// Getting All the value
+let count = 0;
 /**
  * *Add EventListener fort Calculate Button
  */
-let count = 0;
 const calculateButton = document.getElementById("calculate");
 calculateButton.addEventListener("click", function () {
   count += 1;
-  const income = parseFloat(document.getElementById("income").value);
-  const software = parseFloat(document.getElementById("software").value);
-  const courses = parseFloat(document.getElementById("courses").value);
-  const internet = parseFloat(document.getElementById("internet").value);
-  const savings = parseFloat(document.getElementById("savings").value);
+  // const income = parseFloat(document.getElementById("income").value);
+  // const software = parseFloat(document.getElementById("software").value);
+  // const courses = parseFloat(document.getElementById("courses").value);
+  // const internet = parseFloat(document.getElementById("internet").value);
+  // const savings = parseFloat(document.getElementById("savings").value);
+
+  // Get value from function
+  const income = getInputValueById("income");
+  const software = getInputValueById("software");
+  const courses = getInputValueById("courses");
+  const internet = getInputValueById("internet");
+  const savings = getInputValueById("savings");
+
+  if (income <= 0 || isNaN(income)) {
+    // document.getElementById("income-error").classList.remove("hidden");
+    // return;
+    showError("income-error");
+  }
+  if (software <= 0 || isNaN(software)) {
+    // document.getElementById("software-error").classList.remove("hidden");
+    // return;
+    showError("software-error");
+  }
+  if (courses <= 0 || isNaN(courses)) {
+    // document.getElementById("courses-error").classList.remove("hidden");
+    // return;
+    showError("courses-error");
+  }
+  if (internet <= 0 || isNaN(internet)) {
+    // document.getElementById("internet-error").classList.remove("hidden");
+    // return;
+    showError("internet-error");
+  }
+  if (savings <= 0 || isNaN(savings)) {
+    // document.getElementById("savings-error").classList.remove("hidden");
+    // return;
+    showError("savings-error");
+  }
 
   const totalExpenses = software + courses + internet;
   const balance = income - totalExpenses;
 
+  if (totalExpenses > income) {
+    document.getElementById("logic-error").classList.remove("hidden");
+    return;
+    // showError("logic-error");
+  }
+
   const totalExpensesElement = document.getElementById("total-expenses");
-  totalExpensesElement.innerText = totalExpenses.toFixed(2);
+  totalExpensesElement.innerText = formateCurrency(totalExpenses);
 
   const balanceElement = document.getElementById("balance");
-  balanceElement.innerText = balance.toFixed("2");
+  balanceElement.innerText = formateCurrency(balance);
 
   const result = document.getElementById("results");
   result.classList.remove("hidden");
 
   // Dynamically added history by javascript
-
   const historyCard = document.createElement("div");
   historyCard.className =
     "bg-white p-3 rounded-md border-l-3 border-indigo-500";
@@ -32,9 +83,11 @@ calculateButton.addEventListener("click", function () {
   historyCard.innerHTML = `
 <p class= "font-bold text-xs text-gray-700"> Serial ${count}</p>
 <p class = "text-xs text-gray-700"> ${new Date().toLocaleDateString()}</p>
-<p class = "text-xs text-gray-700"> Income: $${income.toFixed(2)}</p>
-<p class = "text-xs text-gray-700"> Expenses: $${totalExpenses.toFixed(2)} </p>
-<p class = "text-xs text-gray-700"> Balance: $${balance.toFixed(2)} </p>
+<p class = "text-xs text-gray-700"> Income: $${formateCurrency(income)}</p>
+<p class = "text-xs text-gray-700"> Expenses: $${formateCurrency(
+    totalExpenses
+  )} </p>
+<p class = "text-xs text-gray-700"> Balance: $${formateCurrency(balance)} </p>
 `;
 
   const historyContainer = document.getElementById("history-list");
@@ -94,7 +147,6 @@ assistantTab.addEventListener("click", function () {
 
 const calculateSavingsButton = document.getElementById("calculate-savings");
 calculateSavingsButton.addEventListener("click", function () {
-  //   console.log("testing.....");
   const savingPercentage = parseFloat(document.getElementById("savings").value);
   const income = parseFloat(document.getElementById("income").value);
   const software = parseFloat(document.getElementById("software").value);
@@ -111,5 +163,47 @@ calculateSavingsButton.addEventListener("click", function () {
   const remainingBalance = balance - savingAmount;
 
   const remainingElement = document.getElementById("remaining-balance");
-  remainingElement.innerText = remainingBalance.toFixed("2");
+  remainingElement.innerText = formateCurrency(remainingBalance);
+});
+
+// Live validation for Input
+document.getElementById("income").addEventListener("input", function () {
+  const incomeValue = parseFloat(document.getElementById("income").value);
+  if (isNaN(incomeValue) || incomeValue <= 0) {
+    // document.getElementById("income-error").classList.remove("hidden");
+    // return;
+    showError("income-error");
+  }
+});
+document.getElementById("software").addEventListener("input", function () {
+  const softwareValue = parseFloat(document.getElementById("software").value);
+  if (isNaN(softwareValue) || softwareValue <= 0) {
+    // document.getElementById("software-error").classList.remove("hidden");
+    // return;
+    showError("software-error");
+  }
+});
+document.getElementById("courses").addEventListener("input", function () {
+  const coursesValue = parseFloat(document.getElementById("courses").value);
+  if (isNaN(coursesValue) || coursesValue <= 0) {
+    // document.getElementById("courses-error").classList.remove("hidden");
+    // return;
+    showError("courses-error");
+  }
+});
+document.getElementById("internet").addEventListener("input", function () {
+  const internetValue = parseFloat(document.getElementById("internet").value);
+  if (isNaN(internetValue) || internetValue <= 0) {
+    // document.getElementById("internet-error").classList.remove("hidden");
+    // return;
+    showError("internet-error");
+  }
+});
+document.getElementById("savings").addEventListener("input", function () {
+  const savingsValue = parseFloat(document.getElementById("savings").value);
+  if (isNaN(savingsValue) || savingsValue <= 0) {
+    // document.getElementById("savings-error").classList.remove("hidden");
+    // return;
+    showError("savings-error");
+  }
 });
